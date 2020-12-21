@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Hola Expo cada día integro conocimiento</Text>
+      <Text>Hola Expo cada día integro conocimiento y empiezo mi carrera con Omnilife</Text>
       <StatusBar style="auto" />
     </View>
   );
