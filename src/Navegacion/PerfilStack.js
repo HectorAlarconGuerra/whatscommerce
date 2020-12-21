@@ -1,4 +1,4 @@
-import Recat from "react";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import Perfil from "../Pantallas/Perfil/Perfil";

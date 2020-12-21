@@ -1,13 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import RutasAutenticadas from "./src/Navegacion/RutasAutenticadas";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Hola Expo cada día integro conocimiento y empiezo mi carrera con Omnilife</Text>
-      <StatusBar style="auto" />
-    </View>
+   <RutasAutenticadas/>
   );
 }
 
