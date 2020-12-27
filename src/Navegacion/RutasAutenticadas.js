@@ -7,6 +7,7 @@ import { Icon } from "react-native-elements";
 import TiendaStack from "./TiendaStack";
 import PerfilStack from "./PerfilStack";
 import MiTienda from "./MiTiendaStack";
+import ShopButton from "../Components/ShoopButton";
 
 //aquí importaremos algunos componentes más tarde
 
@@ -40,7 +41,8 @@ const TabBar = () => {
       <Tab.Screen
         component={MiTienda}
         name="mitienda"
-        options={{ title: "" }}
+        options={{ title: "", tabBarIcon:()=><ShopButton/> }}
+         
       />
       <Tab.Screen
         component={PerfilStack}
