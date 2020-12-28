@@ -20,6 +20,40 @@ export default function LoginForm() {
       <Input placeholder="Correo" />
       <Input placeholder="Contraseña" />
       <Button title="ENTRAR" />
+      <Text>
+        No Tienes Cuenta?
+        <Text> Crear Cuenta</Text>
+      </Text>
+      <Divider
+        style={{
+          backgroundColor: "#128C7E",
+          height: 1,
+          width: "90%",
+          marginTop: 20,
+        }}
+      />
+      <Text>O</Text>
+
+      <View>
+        <TouchableOpacity>
+          <Icon
+            size={24}
+            type="material-community"
+            name="google"
+            color="#fff"
+            backgroundColor="transparent"
+          />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Icon
+            size={24}
+            type="material-community"
+            name="facebook"
+            color="#fff"
+            backgroundColor="transparent"
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
