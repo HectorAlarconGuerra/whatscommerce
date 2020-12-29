@@ -17,9 +17,41 @@ export default function LoginForm() {
           width: 100,
         }}
       />
-      <Input placeholder="Correo" />
-      <Input placeholder="Contraseña" />
-      <Button title="ENTRAR" />
+      <Input
+        placeholder="Correo"
+        containerStyle={styles.input}
+        rightIcon={{
+          type: "material-community",
+          name: "eye-outline",
+          color: "#128c7e",
+          onPress: () => alert("Hola"),
+        }}
+        leftIcon={{
+          type: "material-community",
+          name: "account-circle-outline",
+          color: "#128c7e",
+        }}
+      />
+      <Input
+        placeholder="Contraseña"
+        containerStyle={styles.input}
+        leftIcon={{
+          type: "material-community",
+          name: "security",
+          color: "#128c7e",
+        }}
+        rightIcon={{
+          type: "material-community",
+          name: "eye-outline",
+          color: "#128c7e",
+          onPress: () => alert("Hola"),
+        }}
+      />
+      <Button
+        title="ENTRAR"
+        containerStyle={styles.btnentrar}
+        buttonStyle={{ backgroundColor: "#25d366" }}
+      />
       <Text>
         No Tienes Cuenta?
         <Text> Crear Cuenta</Text>
@@ -67,5 +99,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 50,
     alignItems: "center",
     paddingTop: 20,
+  },
+  input: {
+    width: "90%",
+    marginTop: 20,
+    height: 50,
+  },
+  btnentrar: {
+    width: "90%",
+    marginTop: 20,
   },
 });
