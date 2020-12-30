@@ -46,15 +46,20 @@ export default function LoginForm() {
           color: "#128c7e",
           onPress: () => alert("Hola"),
         }}
+        onChangeText={(text) => {
+          setpassword(text);
+        }}
+        secureTextEntry={true}
+        value={password}
       />
       <Button
         title="ENTRAR"
         containerStyle={styles.btnentrar}
         buttonStyle={{ backgroundColor: "#25d366" }}
       />
-      <Text>
+      <Text style={styles.txtcrearcuenta}>
         No Tienes Cuenta?
-        <Text> Crear Cuenta</Text>
+        <Text style={styles.cuenta}> Crear Cuenta</Text>
       </Text>
       <Divider
         style={{
@@ -64,10 +69,10 @@ export default function LoginForm() {
           marginTop: 20,
         }}
       />
-      <Text>O</Text>
+      <Text style={styles.texto}>O</Text>
 
-      <View>
-        <TouchableOpacity>
+      <View style={styles.btnlogin}>
+        <TouchableOpacity style={styles.btnloginsocial}>
           <Icon
             size={24}
             type="material-community"
@@ -76,7 +81,7 @@ export default function LoginForm() {
             backgroundColor="transparent"
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity style={styles.btnloginsocial}>
           <Icon
             size={24}
             type="material-community"
@@ -108,5 +113,30 @@ const styles = StyleSheet.create({
   btnentrar: {
     width: "90%",
     marginTop: 20,
+  },
+  txtcrearcuenta: {
+    marginTop: 20,
+  },
+  cuenta: {
+    color: "#128c7e",
+    fontFamily: "Roboto",
+    fontSize: 15,
+  },
+  texto: {
+    fontWeight: "bold",
+    fontSize: 20,
+    marginTop: 20,
+    color: "#128c7e",
+  },
+  btnlogin: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+  },
+  btnloginsocial: {
+    backgroundColor: "#25d366",
+    paddingHorizontal: 40,
+    paddingVertical: 10,
+    borderRadius: 5,
   },
 });
