@@ -5,10 +5,22 @@ import { useNavigation } from "@react-navigation/native";
 import { validaremail } from "../Utils/Utils";
 import { isEmpty } from "lodash";
 
-export default function LoginForm() {
+export default function LoginForm(props) {
+  const {toastRef} = props;
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   // const [state, setstate] = useState({email:"", password:""})
+
+  const iniciarsesion = ()=>{
+    if(isEmpty(email)||isEmpty(password))
+    {
+      toastRef.current.show("Debe ingresar los valores de email y password");
+    }
+    else if (!validaremail(email))
+    {
+      toastRef.current.show("Ingrese un correo válido");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -58,6 +70,7 @@ export default function LoginForm() {
         title="ENTRAR"
         containerStyle={styles.btnentrar}
         buttonStyle={{ backgroundColor: "#25d366" }}
+        onPress={()=>iniciarsesion()}
       />
       <Text style={styles.txtcrearcuenta}>
         No Tienes Cuenta?
