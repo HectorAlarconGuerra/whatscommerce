@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Icon, Input, Divider, Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import { validaremail } from "../Utils/Utils";
+import { isEmpty } from "lodash";
 
 export default function LoginForm() {
   const [email, setemail] = useState("");
@@ -22,7 +24,7 @@ export default function LoginForm() {
         containerStyle={styles.input}
         rightIcon={{
           type: "material-community",
-          name: "eye-outline",
+          name: "at",
           color: "#128c7e",
           onPress: () => alert("Hola"),
         }}
