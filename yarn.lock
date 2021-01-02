@@ -5203,6 +5203,11 @@ react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-native-animated-spinkit@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-animated-spinkit/-/react-native-animated-spinkit-1.4.2.tgz#cb60ff8bcc2bb848409d9aa85ed528646ad1f953"
+  integrity sha512-CLFkynkqRueQK/XUknleiYQr3T0E8cY0KbuaV78JGiHhnF12C3k0ngDAOk6FHssZn3JXnTOVkJsrIBOYkttRmA==
+
 react-native-easy-toast@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-1.2.0.tgz#0f70bcb99e3306cda4800c244bfb4a67d42276ed"

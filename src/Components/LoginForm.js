@@ -7,18 +7,22 @@ import {
 } from "@react-navigation/native";
 import { validaremail } from "../Utils/Utils";
 import { isEmpty } from "lodash";
-import { validarsesion } from "../Utils/Acciones";
+//import { validarsesion, cerrarsesion } from "../Utils/Acciones";
+import Loading from "../Components/Loading";
 import * as firebase from "firebase";
 
 export default function LoginForm(props) {
   const { toastRef } = props;
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const [show, setshow] = useState(false);
+  const [loading, setloading] = useState(false);
+
   // const [state, setstate] = useState({email:"", password:""})
 
   const navigation = useNavigation();
 
-  validarsesion();
+  // cerrarsesion();
 
   const iniciarsesion = () => {
     if (isEmpty(email) || isEmpty(password)) {
@@ -26,15 +30,20 @@ export default function LoginForm(props) {
     } else if (!validaremail(email)) {
       toastRef.current.show("Ingrese un correo válido");
     } else {
+      setloading(true);
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then(() => {
-          console.log("Todod bien");
+        .then((response) => {
+          setloading(false);
+          toastRef.current.show("Ha iniciado sesión exitosamente");
+          console.log(firebase.auth().currentUser);
         })
         .catch((err) => {
-          console.log("error");
-          toastRef.current.show("Email o contraseñas incorrectas");
+          setloading(false);
+          toastRef.current.show(
+            "Ha ocurrido un error al intentar iniciar sesión"
+          );
         });
     }
   };
@@ -62,6 +71,11 @@ export default function LoginForm(props) {
           name: "account-circle-outline",
           color: "#128c7e",
         }}
+        onChangeText={(text) => {
+          setemail(text);
+        }}
+        //secureTextEntry={true}
+        value={email}
       />
       <Input
         placeholder="Contraseña"
@@ -73,14 +87,14 @@ export default function LoginForm(props) {
         }}
         rightIcon={{
           type: "material-community",
-          name: "eye-outline",
+          name: show ? "eye-off-outline" : "eye-outline",
           color: "#128c7e",
-          onPress: () => alert("Hola"),
+          onPress: () => setshow(!show),
         }}
         onChangeText={(text) => {
           setpassword(text);
         }}
-        secureTextEntry={true}
+        secureTextEntry={!show}
         value={password}
       />
       <Button
@@ -128,6 +142,7 @@ export default function LoginForm(props) {
           />
         </TouchableOpacity>
       </View>
+      <Loading isVisible={loading} text="Favor Espere" />
     </View>
   );
 }
