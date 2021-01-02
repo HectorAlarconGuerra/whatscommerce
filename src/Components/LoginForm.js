@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Icon, Input, Divider, Button } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
+import {
+  useNavigation,
+  NavigationRouteContext,
+} from "@react-navigation/native";
 import { validaremail } from "../Utils/Utils";
 import { isEmpty } from "lodash";
 import { validarsesion } from "../Utils/Acciones";
+import * as firebase from "firebase";
 
 export default function LoginForm(props) {
   const { toastRef } = props;
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   // const [state, setstate] = useState({email:"", password:""})
+
+  const navigation = useNavigation();
 
   validarsesion();
 
@@ -19,6 +25,17 @@ export default function LoginForm(props) {
       toastRef.current.show("Debe ingresar los valores de email y password");
     } else if (!validaremail(email)) {
       toastRef.current.show("Ingrese un correo válido");
+    } else {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          console.log("Todod bien");
+        })
+        .catch((err) => {
+          console.log("error");
+          toastRef.current.show("Email o contraseñas incorrectas");
+        });
     }
   };
 
@@ -74,7 +91,12 @@ export default function LoginForm(props) {
       />
       <Text style={styles.txtcrearcuenta}>
         No Tienes Cuenta?
-        <Text style={styles.cuenta}> Crear Cuenta</Text>
+        <Text
+          style={styles.cuenta}
+          onPress={() => navigation.navigate("register")}
+        >
+          Crear Cuenta
+        </Text>
       </Text>
       <Divider
         style={{
