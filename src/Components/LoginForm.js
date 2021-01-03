@@ -20,9 +20,9 @@ export default function LoginForm(props) {
 
   // const [state, setstate] = useState({email:"", password:""})
 
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
 
-  // cerrarsesion();
+  //cerrarsesion();
 
   const iniciarsesion = () => {
     if (isEmpty(email) || isEmpty(password)) {

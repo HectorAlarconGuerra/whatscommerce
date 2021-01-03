@@ -36,5 +36,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 24,
     textTransform: "uppercase",
+    textAlign: "center",
   },
 });
