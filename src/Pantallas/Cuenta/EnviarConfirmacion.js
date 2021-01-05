@@ -1,14 +1,49 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, View, Text, TextInput, Image } from "react-native";
+import { StyleSheet, View, Text, TextInput, Image, Alert } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import CountryPicker from "react-native-country-picker-modal";
 import { useNavigation } from "@react-navigation/native";
 import { isEmpty } from "lodash";
+import FirebaseRecapcha from "../../Utils/FirebaseRecapcha";
+import { enviarconfirmacionphone } from "../../Utils/Acciones";
 
 export default function EnviarConfirmacion() {
   const [country, setcountry] = useState("EC");
   const [callingCode, setcallingCode] = useState("593");
   const [phone, setphone] = useState("");
+  const recaptchaVerifier = useRef();
+  const inputphone = useRef();
+
+  const navigation = useNavigation();
+
+  const enviarconfirmacion = async () => {
+    if (!isEmpty(phone)) {
+      const numero = `+${callingCode}${phone}`;
+      const verificationid = await enviarconfirmacionphone(
+        numero,
+        recaptchaVerifier
+      );
+
+      if (!isEmpty(verificationid)) {
+        navigation.navigate("confirmar-movil", { verificationid });
+      } else {
+        Alert.alert(
+          "Verificación",
+          "Favor introduzca un número de teléfono válido",
+          [
+            {
+              style: "cancel",
+              text: "Entendido",
+              onPress: () => {
+                inputphone.current.clear();
+                inputphone.current.focus();
+              },
+            },
+          ]
+        );
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -51,15 +86,18 @@ export default function EnviarConfirmacion() {
               placeholderTextColor="#fff"
               onChangeText={(text) => setphone(text)}
               value={phone}
+              ref={inputphone}
             />
           </View>
           <Button
             title="Confirmar Número"
             buttonStyle={{ backgroundColor: "#25d366", marginHorizontal: 20 }}
             containerStyle={{ marginVertical: 20 }}
+            onPress={() => enviarconfirmacion()}
           />
         </View>
       </View>
+      <FirebaseRecapcha referencia={recaptchaVerifier} />
     </View>
   );
 }
