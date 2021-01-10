@@ -3,8 +3,23 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import CodeInput from "react-native-code-input";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../Components/Loading";
+import { confirmarcodigo } from "../../Utils/Acciones";
 
 export default function ConfirmarNumero(props) {
+  const { route } = props;
+  const { verificationid } = route.params;
+
+  const [loading, setloading] = useState(false);
+
+  const confirmarCodigoSMS = async (code) => {
+    const resultado = await confirmarcodigo(verificationid, code);
+    console.log(resultado);
+
+    //Va a extraer la información del usuario
+    //Va a obtener el token - pushnotification
+    //va hacer las validaciones y confirmar la autenticacion
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -24,9 +39,10 @@ export default function ConfirmarNumero(props) {
         containerStyle={{ marginTop: 30 }}
         codeInputStyle={{ borderWidth: 1.5 }}
         onFulfill={(code) => {
-          console.log(code);
+          confirmarCodigoSMS(code);
         }}
       />
+      <Loading isVisible={loading} text="Favor espere" />
     </View>
   );
 }
