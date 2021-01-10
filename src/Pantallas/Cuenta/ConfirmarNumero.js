@@ -4,7 +4,7 @@ import CodeInput from "react-native-code-input";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../Components/Loading";
 
-export default function ConfirmarNumero() {
+export default function ConfirmarNumero(props) {
   return (
     <View style={styles.container}>
       <Image
@@ -23,7 +23,7 @@ export default function ConfirmarNumero() {
         codeLength={6}
         containerStyle={{ marginTop: 30 }}
         codeInputStyle={{ borderWidth: 1.5 }}
-        onFullfill={(code) => {
+        onFulfill={(code) => {
           console.log(code);
         }}
       />
