@@ -1,8 +1,17 @@
 import { firebaseapp } from "./Firebase";
+import { Platform } from "react-native";
 import * as firebase from "firebase";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 export const validarsesion = (setvalidarsesion) => {
   firebase.auth().onAuthStateChanged((user) => {
@@ -87,4 +96,8 @@ export const obtenerToken = async () => {
     });
   }
   return token;
+};
+
+export const ObtenerUsuario = () => {
+  return firebase.auth().currentUser;
 };

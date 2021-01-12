@@ -3,7 +3,11 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import CodeInput from "react-native-code-input";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../Components/Loading";
-import { confirmarcodigo } from "../../Utils/Acciones";
+import {
+  confirmarcodigo,
+  obtenerToken,
+  ObtenerUsuario,
+} from "../../Utils/Acciones";
 
 export default function ConfirmarNumero(props) {
   const { route } = props;
@@ -12,8 +16,11 @@ export default function ConfirmarNumero(props) {
   const [loading, setloading] = useState(false);
 
   const confirmarCodigoSMS = async (code) => {
-    const resultado = await confirmarcodigo(verificationid, code);
-    console.log(resultado);
+    // const resultado = await confirmarcodigo(verificationid, code);
+    // console.log(resultado);
+    // console.log(await obtenerToken());
+
+    const { uid, displayName, photoURL, email, phoneNumber } = ObtenerUsuario();
 
     //Va a extraer la información del usuario
     //Va a obtener el token - pushnotification
