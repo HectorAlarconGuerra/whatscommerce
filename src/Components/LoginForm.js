@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Icon, Input, Divider, Button } from "react-native-elements";
-import {
-  useNavigation,
-  NavigationRouteContext,
-} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { validaremail } from "../Utils/Utils";
 import { isEmpty } from "lodash";
 //import { validarsesion, cerrarsesion } from "../Utils/Acciones";
@@ -20,7 +17,7 @@ export default function LoginForm(props) {
 
   // const [state, setstate] = useState({email:"", password:""})
 
-  //const navigation = useNavigation();
+  const navigation = useNavigation();
 
   //cerrarsesion();
 

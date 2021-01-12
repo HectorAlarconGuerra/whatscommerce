@@ -1,6 +1,5 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, YellowBox } from "react-native";
+import { StyleSheet, Text, View, LogBox } from "react-native";
 //import RutasAutenticadas from "./src/Navegacion/RutasAutenticadas";
 import RutasNoAutenticadas from "./src/Navegacion/RutasNoAutenticadas";
 //import {cerrarsesion} from "./src/Utils/Acciones";
@@ -8,7 +7,12 @@ import SwitchNavigator from "./src/Navegacion/SwitchNavigator";
 import { validarsesion } from "./src/Utils/Acciones";
 import Loading from "./src/Components/Loading";
 
-YellowBox.ignoreWarnings(["Animated"]);
+LogBox.ignoreLogs([
+  "Animated",
+  "Setting a timer",
+  "Avatar.onAccessoryPress",
+  "Avatar.showAccessory",
+]);
 
 export default function App() {
   //cerrarsesion();

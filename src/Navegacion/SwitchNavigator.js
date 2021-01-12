@@ -3,7 +3,7 @@ import Loading from "../Components/LoginForm";
 import RutasAutenticadas from "./RutasAutenticadas";
 import CuentaStack from "./CuentaStack";
 import { validarPhone } from "../Utils/Acciones";
-import { validaremail } from "../Utils/Utils";
+//import { validaremail } from "../Utils/Utils";
 
 export default function SwitchNavigator() {
   const [phoneauth, setphoneauth] = useState(false);
