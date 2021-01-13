@@ -3,10 +3,11 @@ import { View, Text, StyleSheet, Image, StatusBar } from "react-native";
 
 import LoginForm from "../../Components/LoginForm";
 import Toast from "react-native-easy-toast";
+import { useNavigation } from "@react-navigation/native"; // Cambio Omar
 
 export default function Login() {
   const toastRef = useRef();
-
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#128C73" />
@@ -15,7 +16,7 @@ export default function Login() {
         style={styles.imglogo}
       />
       <Text style={styles.textobaner}>Bienvenido!</Text>
-      <LoginForm toastRef={toastRef} />
+      <LoginForm toastRef={toastRef} navigation={navigation} />
       <Toast ref={toastRef} position="center" opacity={0.9} />
     </View>
   );

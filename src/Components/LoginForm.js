@@ -9,7 +9,7 @@ import Loading from "../Components/Loading";
 import * as firebase from "firebase";
 
 export default function LoginForm(props) {
-  const { toastRef } = props;
+  const { toastRef, navigation } = props;
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [show, setshow] = useState(false);
@@ -17,7 +17,7 @@ export default function LoginForm(props) {
 
   // const [state, setstate] = useState({email:"", password:""})
 
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
 
   //cerrarsesion();
 
