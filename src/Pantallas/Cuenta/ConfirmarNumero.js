@@ -17,7 +17,7 @@ export default function ConfirmarNumero(props) {
 
   const confirmarCodigoSMS = async (code) => {
     // const resultado = await confirmarcodigo(verificationid, code);
-    // console.log(resultado);
+    //console.log(resultado);
     console.log(await obtenerToken());
     //  const { uid, displayName, photoURL, email, phoneNumber } = ObtenerUsuario();
     //Va a extraer la información del usuario

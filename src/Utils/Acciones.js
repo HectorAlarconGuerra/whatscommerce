@@ -4,6 +4,9 @@ import * as firebase from "firebase";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
+import "firebase/firestore";
+
+const db = firebase.firestore(firebaseapp);
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -24,15 +27,15 @@ export const validarsesion = (setvalidarsesion) => {
 };
 
 export const cerrarsesion = () => {
-  firebase.auth.signOut();
+  firebase.auth().signOut();
 };
 
 export const validarPhone = (setphoneauth) => {
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user.phoneNumber) {
-      setphoneauth(true);
-    }
-  });
+  db.collection("Usuarios")
+    .doc(ObtenerUsuario().uid)
+    .onSnapshot((snapshot) => {
+      setphoneauth(snapshot.exists);
+    });
 };
 
 export const enviarconfirmacionphone = async (numero, recapcha) => {
