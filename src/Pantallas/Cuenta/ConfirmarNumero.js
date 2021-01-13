@@ -18,10 +18,8 @@ export default function ConfirmarNumero(props) {
   const confirmarCodigoSMS = async (code) => {
     // const resultado = await confirmarcodigo(verificationid, code);
     // console.log(resultado);
-    // console.log(await obtenerToken());
-
-    const { uid, displayName, photoURL, email, phoneNumber } = ObtenerUsuario();
-
+    console.log(await obtenerToken());
+    //  const { uid, displayName, photoURL, email, phoneNumber } = ObtenerUsuario();
     //Va a extraer la información del usuario
     //Va a obtener el token - pushnotification
     //va hacer las validaciones y confirmar la autenticacion
@@ -48,6 +46,7 @@ export default function ConfirmarNumero(props) {
         onFulfill={(code) => {
           confirmarCodigoSMS(code);
         }}
+        //secureTextEntry
       />
       <Loading isVisible={loading} text="Favor espere" />
     </View>
