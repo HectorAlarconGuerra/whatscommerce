@@ -104,3 +104,18 @@ export const obtenerToken = async () => {
 export const ObtenerUsuario = () => {
   return firebase.auth().currentUser;
 };
+
+export const addRegistroEspecifico = async (coleccion, doc, data) => {
+  const resultado = { error: "", statusreponse: false };
+
+  await db
+    .collection(coleccion)
+    .doc(doc)
+    .set(data)
+    .then((response) => {
+      resultado.statusreponse = true;
+    })
+    .catch((err) => {
+      resultado.error = err;
+    });
+};

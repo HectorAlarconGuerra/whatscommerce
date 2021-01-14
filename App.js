@@ -6,6 +6,15 @@ import RutasNoAutenticadas from "./src/Navegacion/RutasNoAutenticadas";
 import SwitchNavigator from "./src/Navegacion/SwitchNavigator";
 import { validarsesion } from "./src/Utils/Acciones";
 import Loading from "./src/Components/Loading";
+import { encode, decode } from "base-64";
+
+if (!global.btoa) {
+  global.btoa = encode;
+}
+
+if (!global.atob) {
+  global.atob = decode;
+}
 
 LogBox.ignoreLogs([
   "Animated",

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, Alert } from "react-native";
 import CodeInput from "react-native-code-input";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../Components/Loading";
@@ -7,6 +7,7 @@ import {
   confirmarcodigo,
   obtenerToken,
   ObtenerUsuario,
+  addRegistroEspecifico,
 } from "../../Utils/Acciones";
 
 export default function ConfirmarNumero(props) {
@@ -16,13 +17,41 @@ export default function ConfirmarNumero(props) {
   const [loading, setloading] = useState(false);
 
   const confirmarCodigoSMS = async (code) => {
-    // const resultado = await confirmarcodigo(verificationid, code);
-    //console.log(resultado);
-    console.log(await obtenerToken());
-    //  const { uid, displayName, photoURL, email, phoneNumber } = ObtenerUsuario();
-    //Va a extraer la información del usuario
-    //Va a obtener el token - pushnotification
-    //va hacer las validaciones y confirmar la autenticacion
+    setloading(true);
+    const resultado = await confirmarcodigo(verificationid, code);
+
+    if (resultado) {
+      const token = await obtenerToken();
+
+      const {
+        uid,
+        displayName,
+        photoURL,
+        email,
+        phoneNumber,
+      } = ObtenerUsuario();
+
+      const registro = await addRegistroEspecifico("Usuarios", uid, {
+        token,
+        displayName,
+        photoURL,
+        email,
+        phoneNumber,
+        fechacreacion: new Date(),
+      });
+      setloading(false);
+    } else {
+      Alert.alert(
+        "Error",
+        "Favor validar el código introducido"[
+          {
+            style: "default",
+            text: "Entendido",
+          }
+        ]
+      );
+    }
+    setloading(false);
   };
 
   return (
@@ -46,7 +75,7 @@ export default function ConfirmarNumero(props) {
         onFulfill={(code) => {
           confirmarCodigoSMS(code);
         }}
-        //secureTextEntry
+        secureTextEntry
       />
       <Loading isVisible={loading} text="Favor espere" />
     </View>
