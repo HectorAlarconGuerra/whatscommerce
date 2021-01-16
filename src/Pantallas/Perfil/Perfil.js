@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, StatusBar } from "react-native";
 import { Icon, Avatar, Input } from "react-native-elements";
+import { cargarImagenesxAspecto } from "../../Utils/Utils";
 
 export default function Perfil() {
   return (
@@ -24,8 +25,9 @@ function CabeceraBG() {
 }
 
 function HeaderAvatar(props) {
-  const cambiarfoto = () => {
-    console.log("Hola");
+  const cambiarfoto = async () => {
+    const resultado = await cargarImagenesxAspecto([1, 1]);
+    console.log(resultado);
   };
 
   return (
