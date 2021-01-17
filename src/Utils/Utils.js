@@ -16,15 +16,23 @@ export const cargarImagenesxAspecto = async (array) => {
   const cameraPermissions = resultPermissions.permissions.cameraRoll.status;
 
   if (cameraPermissions === "denied") {
-    alert("Usted debe permitir el acceso para cargar las imagenes");
+    alert("Usted debe permitir el accesos para cargar las imagenes");
   } else {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: array,
     });
+
     if (!result.cancelled) {
-      imgResponse = { status: true, image: result.uri };
+      imgResponse = { status: true, imagen: result.uri };
     }
   }
   return imgResponse;
+};
+
+export const convertirFicheroBlob = async (rutafisica) => {
+  const fichero = await fetch(rutafisica);
+  const blob = await fichero.blob();
+
+  return blob;
 };
