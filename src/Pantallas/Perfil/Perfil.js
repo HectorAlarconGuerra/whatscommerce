@@ -2,14 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, StatusBar } from "react-native";
 import { Icon, Avatar, Input } from "react-native-elements";
 import { cargarImagenesxAspecto } from "../../Utils/Utils";
-import { subirImagenesBatch } from "../../Utils/Acciones";
+import {
+  subirImagenesBatch,
+  ObtenerUsuario,
+  addRegistroEspecifico,
+  actualizarPerfil,
+} from "../../Utils/Acciones";
 
 export default function Perfil() {
+  const usuario = ObtenerUsuario();
+
+  console.log(usuario);
+
   return (
     <View>
       <StatusBar backgroundColor="#128c7e" />
       <CabeceraBG />
-      <HeaderAvatar />
+      <HeaderAvatar usuario={usuario} />
     </View>
   );
 }
@@ -26,11 +35,20 @@ function CabeceraBG() {
 }
 
 function HeaderAvatar(props) {
+  const { usuario } = props;
+  const { uid } = usuario;
   const cambiarfoto = async () => {
     const resultado = await cargarImagenesxAspecto([1, 1]);
-
     const url = await subirImagenesBatch([resultado.imagen], "Perfil");
-    console.log(url);
+    const update = await actualizarPerfil({ photoURL: url[0] });
+    const response = await addRegistroEspecifico("Usuarios", uid, {
+      photoURL: url[0],
+    });
+    if (response.statusreponse) {
+      console.log("ok");
+    } else {
+      console.log("Algo salió mal");
+    }
   };
 
   return (

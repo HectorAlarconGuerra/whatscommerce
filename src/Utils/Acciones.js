@@ -147,3 +147,14 @@ export const subirImagenesBatch = async (imagenes, ruta) => {
 
   return imagenesurl;
 };
+
+export const actualizarPerfil = async (data) => {
+  let respuesta = false;
+  await firebase
+    .auth()
+    .currentUser.updateProfile(data)
+    .then((response) => {
+      respuesta = true;
+    });
+  return respuesta;
+};
