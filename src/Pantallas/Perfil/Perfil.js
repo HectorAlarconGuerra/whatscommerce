@@ -8,9 +8,16 @@ import {
   addRegistroEspecifico,
   actualizarPerfil,
 } from "../../Utils/Acciones";
+import Loading from "../../Components/Loading";
 
 export default function Perfil() {
+  const [imagenperfil, setimagenperfil] = useState("");
+  const [loading, setloading] = useState(false);
   const usuario = ObtenerUsuario();
+
+  useEffect(() => {
+    setimagenperfil(usuario.photoURL);
+  }, []);
 
   console.log(usuario);
 
@@ -18,7 +25,13 @@ export default function Perfil() {
     <View>
       <StatusBar backgroundColor="#128c7e" />
       <CabeceraBG />
-      <HeaderAvatar usuario={usuario} />
+      <HeaderAvatar
+        usuario={usuario}
+        imagenperfil={imagenperfil}
+        setimagenperfil={setimagenperfil}
+        setloading={setloading}
+      />
+      <Loading isVisible={loading} text="Favor Espere" />
     </View>
   );
 }
@@ -35,26 +48,36 @@ function CabeceraBG() {
 }
 
 function HeaderAvatar(props) {
-  const { usuario } = props;
+  const { usuario, setimagenperfil, imagenperfil, setloading } = props;
   const { uid } = usuario;
+
   const cambiarfoto = async () => {
     const resultado = await cargarImagenesxAspecto([1, 1]);
-    const url = await subirImagenesBatch([resultado.imagen], "Perfil");
-    const update = await actualizarPerfil({ photoURL: url[0] });
-    const response = await addRegistroEspecifico("Usuarios", uid, {
-      photoURL: url[0],
-    });
-    if (response.statusreponse) {
-      console.log("ok");
-    } else {
-      console.log("Algo salió mal");
+    if (resultado.status) {
+      setloading(true);
+      const url = await subirImagenesBatch([resultado.imagen], "Perfil");
+      const update = await actualizarPerfil({ photoURL: url[0] });
+      const response = await addRegistroEspecifico("Usuarios", uid, {
+        photoURL: url[0],
+      });
+      if (response.statusreponse) {
+        setimagenperfil(url[0]);
+        setloading(false);
+      } else {
+        setloading(false);
+        alert("Ha ocurrido un error al actualizar la foto de perfil");
+      }
     }
   };
 
   return (
     <View style={styles.avatarinline}>
       <Avatar
-        source={require("../../../assets/avatar.jpg")}
+        source={
+          imagenperfil
+            ? { uri: imagenperfil }
+            : require("../../../assets/avatar.jpg")
+        }
         style={styles.avatar}
         size="large"
         rounded
