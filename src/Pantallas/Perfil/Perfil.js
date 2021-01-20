@@ -9,14 +9,22 @@ import {
   actualizarPerfil,
 } from "../../Utils/Acciones";
 import Loading from "../../Components/Loading";
+import InputEditable from "../../Components/InputEditable";
 
 export default function Perfil() {
   const [imagenperfil, setimagenperfil] = useState("");
   const [loading, setloading] = useState(false);
   const usuario = ObtenerUsuario();
+  const [displayName, setdisplayName] = useState("");
+  const [phoneNumber, setphoneNumber] = useState("");
+  const [email, setemail] = useState("");
 
   useEffect(() => {
     setimagenperfil(usuario.photoURL);
+    const { displayName, phoneNumber, email } = usuario;
+    setdisplayName(displayName);
+    setphoneNumber(phoneNumber);
+    setemail(email);
   }, []);
 
   console.log(usuario);
@@ -31,6 +39,7 @@ export default function Perfil() {
         setimagenperfil={setimagenperfil}
         setloading={setloading}
       />
+      <FormDatos />
       <Loading isVisible={loading} text="Favor Espere" />
     </View>
   );
@@ -84,6 +93,14 @@ function HeaderAvatar(props) {
         showAccessory={true}
         onAccessoryPress={cambiarfoto}
       />
+    </View>
+  );
+}
+
+function FormDatos(props) {
+  return (
+    <View>
+      <InputEditable />
     </View>
   );
 }
