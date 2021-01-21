@@ -27,6 +27,34 @@ export default function Perfil() {
     setemail(email);
   }, []);
 
+  const onChangeInput = (input, valor) => {
+    switch (input) {
+      case "displayName":
+        setdisplayName(valor);
+        break;
+      case "email":
+        setemail(valor);
+        break;
+      case "phoneNumber":
+        setphoneNumber(valor);
+        break;
+    }
+  };
+
+  const obtenerValor = (input) => {
+    switch (input) {
+      case "displayName":
+        return displayName;
+        break;
+      case "email":
+        return email;
+        break;
+      case "phoneNumber":
+        return phoneNumber;
+        break;
+    }
+  };
+
   console.log(usuario);
 
   return (
@@ -39,7 +67,7 @@ export default function Perfil() {
         setimagenperfil={setimagenperfil}
         setloading={setloading}
       />
-      <FormDatos />
+      <FormDatos onChangeInput={onChangeInput} obtenerValor={obtenerValor} />
       <Loading isVisible={loading} text="Favor Espere" />
     </View>
   );
@@ -98,9 +126,30 @@ function HeaderAvatar(props) {
 }
 
 function FormDatos(props) {
+  const { onChangeInput, obtenerValor } = props;
   return (
     <View>
-      <InputEditable />
+      <InputEditable
+        id="displayName"
+        label="Nombre"
+        obtenerValor={obtenerValor}
+        placeholder="Nombre"
+        onChangeInput={onChangeInput}
+      />
+      <InputEditable
+        id="email"
+        label="Correo"
+        obtenerValor={obtenerValor}
+        placeholder="ejemplo@ejemplo.com"
+        onChangeInput={onChangeInput}
+      />
+      <InputEditable
+        id="phoneNumber"
+        label="Teléfono"
+        obtenerValor={obtenerValor}
+        placeholder="+593000000"
+        onChangeInput={onChangeInput}
+      />
     </View>
   );
 }

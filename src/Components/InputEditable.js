@@ -2,11 +2,21 @@ import React, { useRef } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 
 export default function InputEditable(props) {
+  const { label, placeholder, onChangeInput, obtenerValor, id } = props;
+
   return (
     <View style={styles.input}>
-      <Text style={styles.label}>Label</Text>
+      <Text style={styles.label}>{label}</Text>
       <View style={styles.row}>
-        <TextInput style={styles.textinputinternal} placeholder="prueba" />
+        <TextInput
+          key={id}
+          placeholder={placeholder}
+          value={obtenerValor(id)}
+          onChangeText={(text) => {
+            onChangeInput(id, text);
+          }}
+          style={styles.textinputinternal}
+        />
       </View>
     </View>
   );
