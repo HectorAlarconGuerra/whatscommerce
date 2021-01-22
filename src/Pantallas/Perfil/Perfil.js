@@ -10,6 +10,9 @@ import {
 } from "../../Utils/Acciones";
 import Loading from "../../Components/Loading";
 import InputEditable from "../../Components/InputEditable";
+import Modal from "../../Components/Modal";
+import CodeInput from "react-native-code-input";
+import FirebaseRecapcha from "../../Utils/FirebaseRecapcha";
 
 export default function Perfil() {
   const [imagenperfil, setimagenperfil] = useState("");
@@ -22,6 +25,11 @@ export default function Perfil() {
   const [editablename, seteditablename] = useState(false);
   const [editableemail, seteditableemail] = useState(false);
   const [editablephone, seteditablephone] = useState(false);
+
+  const [verificationid, setverificationid] = useState("");
+  const [isVisible, setisVisible] = useState(true);
+
+  const recapcha = useRef();
 
   useEffect(() => {
     setimagenperfil(usuario.photoURL);
@@ -59,7 +67,23 @@ export default function Perfil() {
     }
   };
 
-  console.log(usuario);
+  const actualizarValor = async (input, valor) => {
+    switch (input) {
+      case "displayName":
+        console.log(await actualizarPerfil({ displayName: valor }));
+        addRegistroEspecifico("Usuarios", usuario.uid, { displayName: valor });
+        console.log(usuario);
+        break;
+      case "email":
+        break;
+      case "phoneNumber":
+        break;
+    }
+  };
+
+  const ConfirmarCodigo = async () => {
+    console.log("Confirmar codigo");
+  };
 
   return (
     <View>
@@ -80,6 +104,13 @@ export default function Perfil() {
         seteditableemail={seteditableemail}
         seteditablephone={seteditablephone}
         seteditablename={seteditablename}
+        actualizarValor={actualizarValor}
+      />
+      <ModalVerification
+        isVisibleModal={isVisible}
+        setisVisibleModal={setisVisible}
+        verificationid={verificationid}
+        ConfirmarCodigo={ConfirmarCodigo}
       />
       <Loading isVisible={loading} text="Favor Espere" />
     </View>
@@ -148,6 +179,7 @@ function FormDatos(props) {
     seteditableemail,
     seteditablename,
     seteditablephone,
+    actualizarValor,
   } = props;
   return (
     <View>
@@ -159,6 +191,7 @@ function FormDatos(props) {
         onChangeInput={onChangeInput}
         editable={editablename}
         seteditable={seteditablename}
+        actualizarValor={actualizarValor}
       />
       <InputEditable
         id="email"
@@ -168,6 +201,7 @@ function FormDatos(props) {
         onChangeInput={onChangeInput}
         editable={editableemail}
         seteditable={seteditableemail}
+        actualizarValor={actualizarValor}
       />
       <InputEditable
         id="phoneNumber"
@@ -177,8 +211,41 @@ function FormDatos(props) {
         onChangeInput={onChangeInput}
         editable={editablephone}
         seteditable={seteditablephone}
+        actualizarValor={actualizarValor}
       />
     </View>
+  );
+}
+
+function ModalVerification(props) {
+  const {
+    isVisibleModal,
+    setisVisibleModal,
+    ConfirmarCodigo,
+    verificationid,
+  } = props;
+
+  return (
+    <Modal isVisible={isVisibleModal} setIsVisible={setisVisibleModal}>
+      <View style={styles.confirmacion}>
+        <Text style={styles.titulomodal}>Confirmar Código</Text>
+        <Text style={styles.detalle}>
+          Se ha enviado un código de verificación a su número de teléfono
+        </Text>
+
+        <CodeInput
+          secureTextEntry
+          activeColor="#128c7e"
+          inactiveColor="#128c7e"
+          autoFocus={false}
+          inputPosition="center"
+          size={40}
+          containerStyle={{ marginTop: 30 }}
+          codeInputStyle={{ borderWidth: 1.5 }}
+          codeLength={6}
+        />
+      </View>
+    </Modal>
   );
 }
 
@@ -200,5 +267,20 @@ const styles = StyleSheet.create({
   avatar: {
     width: 80,
     height: 80,
+  },
+  confirmacion: {
+    height: 200,
+    width: "100%",
+    alignItems: "center",
+  },
+  titulomodal: {
+    fontWeight: "bold",
+    fontSize: 18,
+    marginTop: 20,
+  },
+  detalle: {
+    marginTop: 20,
+    fontSize: 14,
+    textAlign: "center",
   },
 });

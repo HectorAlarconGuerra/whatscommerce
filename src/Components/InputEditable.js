@@ -11,6 +11,7 @@ export default function InputEditable(props) {
     id,
     editable,
     seteditable,
+    actualizarValor,
   } = props;
 
   const editar = () => {
@@ -35,7 +36,10 @@ export default function InputEditable(props) {
             name="content-save"
             type="material-community"
             size={24}
-            onPress={editar}
+            onPress={() => {
+              actualizarValor(id, obtenerValor(id));
+              editar();
+            }}
             style={styles.icon}
           />
         ) : (

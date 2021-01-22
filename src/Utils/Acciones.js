@@ -158,3 +158,22 @@ export const actualizarPerfil = async (data) => {
     });
   return respuesta;
 };
+
+export const reautenticar = async (verificationId, code) => {
+  let response = { statusresponse: false };
+
+  const credenciales = new firebase.auth.PhoneAuthProvider.credential(
+    verificationId,
+    code
+  );
+
+  await firebase
+    .auth()
+    .currentUser.reauthenticateWithCredential(credenciales)
+    .then((resultado) => (response.statusresponse = true))
+    .catch((err) => {
+      console.log(err);
+    });
+
+  return response;
+};
