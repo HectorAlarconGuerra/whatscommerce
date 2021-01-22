@@ -19,6 +19,10 @@ export default function Perfil() {
   const [phoneNumber, setphoneNumber] = useState("");
   const [email, setemail] = useState("");
 
+  const [editablename, seteditablename] = useState(false);
+  const [editableemail, seteditableemail] = useState(false);
+  const [editablephone, seteditablephone] = useState(false);
+
   useEffect(() => {
     setimagenperfil(usuario.photoURL);
     const { displayName, phoneNumber, email } = usuario;
@@ -67,7 +71,16 @@ export default function Perfil() {
         setimagenperfil={setimagenperfil}
         setloading={setloading}
       />
-      <FormDatos onChangeInput={onChangeInput} obtenerValor={obtenerValor} />
+      <FormDatos
+        onChangeInput={onChangeInput}
+        obtenerValor={obtenerValor}
+        editableemail={editableemail}
+        editablephone={editablephone}
+        editablename={editablename}
+        seteditableemail={seteditableemail}
+        seteditablephone={seteditablephone}
+        seteditablename={seteditablename}
+      />
       <Loading isVisible={loading} text="Favor Espere" />
     </View>
   );
@@ -126,7 +139,16 @@ function HeaderAvatar(props) {
 }
 
 function FormDatos(props) {
-  const { onChangeInput, obtenerValor } = props;
+  const {
+    onChangeInput,
+    obtenerValor,
+    editableemail,
+    editablename,
+    editablephone,
+    seteditableemail,
+    seteditablename,
+    seteditablephone,
+  } = props;
   return (
     <View>
       <InputEditable
@@ -135,6 +157,8 @@ function FormDatos(props) {
         obtenerValor={obtenerValor}
         placeholder="Nombre"
         onChangeInput={onChangeInput}
+        editable={editablename}
+        seteditable={seteditablename}
       />
       <InputEditable
         id="email"
@@ -142,6 +166,8 @@ function FormDatos(props) {
         obtenerValor={obtenerValor}
         placeholder="ejemplo@ejemplo.com"
         onChangeInput={onChangeInput}
+        editable={editableemail}
+        seteditable={seteditableemail}
       />
       <InputEditable
         id="phoneNumber"
@@ -149,6 +175,8 @@ function FormDatos(props) {
         obtenerValor={obtenerValor}
         placeholder="+593000000"
         onChangeInput={onChangeInput}
+        editable={editablephone}
+        seteditable={seteditablephone}
       />
     </View>
   );
