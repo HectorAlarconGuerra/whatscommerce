@@ -177,3 +177,15 @@ export const reautenticar = async (verificationId, code) => {
 
   return response;
 };
+
+export const actualizaremailfirebase = async (email) => {
+  let response = { statusresponse: false };
+  await firebase
+    .auth()
+    .currentUser.updateEmail(email)
+    .then((respuesta) => {
+      response.statusresponse = true;
+    })
+    .catch((err) => (response.statusresponse = false));
+  return response;
+};

@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, StatusBar } from "react-native";
 import { Icon, Avatar, Input } from "react-native-elements";
-import { cargarImagenesxAspecto } from "../../Utils/Utils";
+import { cargarImagenesxAspecto, validaremail } from "../../Utils/Utils";
 import {
   subirImagenesBatch,
   ObtenerUsuario,
   addRegistroEspecifico,
   actualizarPerfil,
+  enviarconfirmacionphone,
+  reautenticar,
+  actualizaremailfirebase,
 } from "../../Utils/Acciones";
 import Loading from "../../Components/Loading";
 import InputEditable from "../../Components/InputEditable";
@@ -27,9 +30,10 @@ export default function Perfil() {
   const [editablephone, seteditablephone] = useState(false);
 
   const [verificationid, setverificationid] = useState("");
-  const [isVisible, setisVisible] = useState(true);
+  const [isVisible, setisVisible] = useState(false);
 
   const recapcha = useRef();
+  console.log(usuario);
 
   useEffect(() => {
     setimagenperfil(usuario.photoURL);
@@ -75,14 +79,50 @@ export default function Perfil() {
         console.log(usuario);
         break;
       case "email":
+        if (valor !== usuario.email) {
+          if (validaremail(valor)) {
+            const verification = await enviarconfirmacionphone(
+              phoneNumber,
+              recapcha
+            );
+            if (verification) {
+              setverificationid(verification);
+              setisVisible(true);
+            } else {
+              alert("Ha ocurrido un error en la verificación");
+              setemail(usuario.email);
+            }
+          }
+        }
         break;
       case "phoneNumber":
         break;
     }
   };
 
-  const ConfirmarCodigo = async () => {
-    console.log("Confirmar codigo");
+  const ConfirmarCodigo = async (verificationid, code) => {
+    setloading(true);
+    const resultado = await reautenticar(verificationid, code);
+    console.log(resultado);
+
+    if (resultado.statusresponse) {
+      const emailresponse = await actualizaremailfirebase(email);
+      const updateregistro = await addRegistroEspecifico(
+        "Usuarios",
+        usuario.uid,
+        { email: email }
+      );
+
+      console.log(emailresponse);
+      console.log(updateregistro);
+
+      setloading(false);
+      setisVisible(false);
+    } else {
+      alert("Ha ocurrido un error al actualizar el correo");
+      setloading(false);
+      setisVisible(false);
+    }
   };
 
   return (
@@ -112,6 +152,7 @@ export default function Perfil() {
         verificationid={verificationid}
         ConfirmarCodigo={ConfirmarCodigo}
       />
+      <FirebaseRecapcha referencia={recapcha} />
       <Loading isVisible={loading} text="Favor Espere" />
     </View>
   );
@@ -243,6 +284,9 @@ function ModalVerification(props) {
           containerStyle={{ marginTop: 30 }}
           codeInputStyle={{ borderWidth: 1.5 }}
           codeLength={6}
+          onFulfill={(code) => {
+            ConfirmarCodigo(verificationid, code);
+          }}
         />
       </View>
     </Modal>
