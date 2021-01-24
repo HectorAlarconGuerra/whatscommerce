@@ -10,12 +10,14 @@ import {
   enviarconfirmacionphone,
   reautenticar,
   actualizaremailfirebase,
+  actualizarTelefono,
 } from "../../Utils/Acciones";
 import Loading from "../../Components/Loading";
 import InputEditable from "../../Components/InputEditable";
 import Modal from "../../Components/Modal";
 import CodeInput from "react-native-code-input";
 import FirebaseRecapcha from "../../Utils/FirebaseRecapcha";
+import { set } from "lodash";
 
 export default function Perfil() {
   const [imagenperfil, setimagenperfil] = useState("");
@@ -31,9 +33,9 @@ export default function Perfil() {
 
   const [verificationid, setverificationid] = useState("");
   const [isVisible, setisVisible] = useState(false);
+  const [updatephone, setupdatephone] = useState(false);
 
   const recapcha = useRef();
-  console.log(usuario);
 
   useEffect(() => {
     setimagenperfil(usuario.photoURL);
@@ -96,34 +98,61 @@ export default function Perfil() {
         }
         break;
       case "phoneNumber":
+        if (valor !== usuario.phoneNumber) {
+          if (validaremail(valor)) {
+            const verification = await enviarconfirmacionphone(
+              phoneNumber,
+              recapcha
+            );
+            if (verification) {
+              setverificationid(verification);
+              setupdatephone(true);
+              setisVisible(true);
+            } else {
+              alert("Ha ocurrido un error en la verificación");
+              setphoneNumber(usuario.phoneNumber);
+            }
+          }
+        }
         break;
     }
   };
 
   const ConfirmarCodigo = async (verificationid, code) => {
     setloading(true);
-    const resultado = await reautenticar(verificationid, code);
-    console.log(resultado);
-
-    if (resultado.statusresponse) {
-      const emailresponse = await actualizaremailfirebase(email);
+    if (updatephone) {
+      const telefono = await actualizarTelefono(verificationid, code);
       const updateregistro = await addRegistroEspecifico(
         "Usuarios",
         usuario.uid,
-        { email: email }
+        { phoneNumber: phoneNumber }
       );
-
-      console.log(emailresponse);
+      setupdatephone(false);
+      console.log(telefono);
       console.log(updateregistro);
-
-      setloading(false);
-      setisVisible(false);
     } else {
-      alert("Ha ocurrido un error al actualizar el correo");
-      setloading(false);
-      setisVisible(false);
+      const resultado = await reautenticar(verificationid, code);
+      console.log(resultado);
+
+      if (resultado.statusresponse) {
+        const emailresponse = await actualizaremailfirebase(email);
+        const updateregistro = await addRegistroEspecifico(
+          "Usuarios",
+          usuario.uid,
+          { email: email }
+        );
+        console.log(emailresponse);
+        console.log(updateregistro);
+      } else {
+        alert("Ha ocurrido un error al actualizar el correo");
+        setloading(false);
+        setisVisible(false);
+      }
     }
+    setloading(false);
+    setisVisible(false);
   };
+  console.log(ObtenerUsuario());
 
   return (
     <View>
