@@ -210,3 +210,19 @@ export const actualizarTelefono = async (verificationId, code) => {
 
   return response;
 };
+
+export const addRegistro = async (colecion, data) => {
+  const resultado = { error: "", statusreponse: false };
+
+  await db
+    .collection(colecion)
+    .add(data)
+    .then((response) => {
+      resultado.statusreponse = true;
+    })
+    .catch((err) => {
+      resultado.error = err;
+    });
+
+  return resultado;
+};

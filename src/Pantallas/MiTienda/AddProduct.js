@@ -19,6 +19,12 @@ import { map, size, filter, isEmpty } from "lodash";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../Components/Loading";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { cargarImagenesxAspecto } from "../../Utils/Utils";
+import {
+  subirImagenesBatch,
+  addRegistro,
+  ObtenerUsuario,
+} from "../../Utils/Acciones";
 
 export default function AddProduct() {
   const [titulo, settitulo] = useState("");
@@ -28,8 +34,89 @@ export default function AddProduct() {
   const [categoria, setcategoria] = useState("");
   const [rating, setrating] = useState(5);
   const [errores, seterrores] = useState({});
+  const [loading, setloading] = useState(false);
   const btnref = useRef();
   const navigation = useNavigation();
+
+  const addProducto = async () => {
+    seterrores({});
+    if (isEmpty(titulo)) {
+      seterrores({ titulo: "El campo título es obligatorio" });
+    } else if (isEmpty(descripcion)) {
+      seterrores({ descripcion: "El campo descripcion es obligatorio" });
+    } else if (!parseFloat(precio) > 0) {
+      seterrores({ precio: "Introduzca un precio para el producto" });
+    } else if (isEmpty(categoria)) {
+      Alert.alert(
+        "Seleccione Categoría",
+        "Favor seleccione una categoría para el producto o servicio",
+        [
+          {
+            style: "cancel",
+            text: "Entendido",
+          },
+        ]
+      );
+    } else if (isEmpty(imagenes)) {
+      Alert.alert(
+        "Seleccione Imagenes",
+        "Favor seleccione una imagen para su producto o servicio",
+        [
+          {
+            style: "cancel",
+            text: "Entendido",
+          },
+        ]
+      );
+    } else {
+      setloading(true);
+      const urlimagenes = await subirImagenesBatch(
+        imagenes,
+        "ImagenesProductos"
+      );
+      const producto = {
+        titulo,
+        descripcion,
+        precio,
+        usuario: ObtenerUsuario().uid,
+        imagenes: urlimagenes,
+        status: 1,
+        fechacreacion: new Date(),
+        rating,
+        categoria,
+      };
+
+      const registrarproducto = await addRegistro("Productos", producto);
+
+      if (registrarproducto.statusreponse) {
+        setloading(false);
+        Alert.alert(
+          "Registro Exitoso",
+          "El producto se ha registrado correctamente",
+          [
+            {
+              style: "cancel",
+              text: "Aceptar",
+              onPress: () => navigation.navigate("mitienda"),
+            },
+          ]
+        );
+      } else {
+        setloading(false);
+
+        Alert.alert(
+          "Registro Fallido",
+          "Ha ocurrido un error al registrar producto",
+          [
+            {
+              style: "cancel",
+              text: "Aceptar",
+            },
+          ]
+        );
+      }
+    }
+  };
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
@@ -72,7 +159,143 @@ export default function AddProduct() {
           setrating(value);
         }}
       />
+      <Text style={styles.txtlabel}>Cargar Imágenes</Text>
+      <SubirImagenes imagenes={imagenes} setimagenes={setimagenes} />
+      <Text style={styles.txtlabel}>Asignar Categoría</Text>
+      <Botonera categoria={categoria} setcategoria={setcategoria} />
+      <Button
+        title="Agregar Nuevo Producto"
+        buttonStyle={styles.btnaddnew}
+        ref={btnref}
+        onPress={addProducto}
+      />
+      <Loading isVisible={loading} text="Favor espere" />
     </KeyboardAwareScrollView>
+  );
+}
+
+function SubirImagenes(props) {
+  const { imagenes, setimagenes } = props;
+
+  const removerimagen = (imagen) => {
+    Alert.alert(
+      "Eliminar Imagen",
+      "¿Estás Seguro de que quieres eliminar la imagen ?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Eliminar",
+          onPress: () => {
+            setimagenes(filter(imagenes, (imagenURL) => imagenURL !== imagen));
+          },
+        },
+      ]
+    );
+  };
+
+  return (
+    <ScrollView
+      style={styles.viewimagenes}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+    >
+      {size(imagenes) < 5 && (
+        <Icon
+          type="material-community"
+          name="plus"
+          color="#7a7a7a"
+          containerStyle={styles.containerIcon}
+          onPress={async () => {
+            const resultado = await cargarImagenesxAspecto([1, 1]);
+            console.log(resultado);
+            if (resultado.status) {
+              setimagenes([...imagenes, resultado.imagen]);
+            }
+          }}
+        />
+      )}
+      {map(imagenes, (imagen, index) => (
+        <Avatar
+          key={index}
+          style={styles.miniatura}
+          source={{ uri: imagen }}
+          onPress={() => {
+            removerimagen(imagen);
+          }}
+        />
+      ))}
+    </ScrollView>
+  );
+}
+
+function Botonera(props) {
+  const { categoria, setcategoria } = props;
+  return (
+    <View style={styles.botonera}>
+      <TouchableOpacity
+        style={styles.btncategoria}
+        onPress={() => {
+          setcategoria("libros");
+        }}
+      >
+        <Icon
+          type="material-community"
+          name="book-open"
+          size={24}
+          color={categoria === "libros" ? "#128c7e" : "#757575"}
+          reverse
+        />
+        <Text>Libros</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.btncategoria}
+        onPress={() => {
+          setcategoria("ideas");
+        }}
+      >
+        <Icon
+          type="material-community"
+          name="lightbulb-on-outline"
+          size={24}
+          color={categoria === "ideas" ? "#128c7e" : "#757575"}
+          reverse
+        />
+        <Text>Ideas</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.btncategoria}
+        onPress={() => {
+          setcategoria("articulos");
+        }}
+      >
+        <Icon
+          type="material-community"
+          name="cart-arrow-down"
+          size={24}
+          color={categoria === "articulos" ? "#128c7e" : "#757575"}
+          reverse
+        />
+        <Text>Artículos</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.btncategoria}
+        onPress={() => {
+          setcategoria("servicios");
+        }}
+      >
+        <Icon
+          type="material-community"
+          name="account"
+          size={24}
+          color={categoria === "servicios" ? "#128c7e" : "#757575"}
+          reverse
+        />
+        <Text>Servicios</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
