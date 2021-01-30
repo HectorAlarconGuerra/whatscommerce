@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, LogBox } from "react-native";
 import RutasNoAutenticadas from "./src/Navegacion/RutasNoAutenticadas";
 //import {cerrarsesion} from "./src/Utils/Acciones";
 import SwitchNavigator from "./src/Navegacion/SwitchNavigator";
-import { validarsesion } from "./src/Utils/Acciones";
+import { validarsesion, iniciarnotificaciones } from "./src/Utils/Acciones";
 import Loading from "./src/Components/Loading";
 import { encode, decode } from "base-64";
 
@@ -33,6 +33,7 @@ export default function App() {
   useEffect(() => {
     setloading(true);
     validarsesion(setuser);
+    iniciarnotificaciones(notificationListener, responseListener);
     setloading(false);
   }, []);
   if (loading) {

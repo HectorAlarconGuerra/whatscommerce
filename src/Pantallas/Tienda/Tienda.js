@@ -32,15 +32,26 @@ export default function Tienda() {
 
   useEffect(() => {
     (async () => {
+      setnotificaciones(0);
       setproductlist(await ListarProductos());
-      console.log(await Buscar("Serv"));
+
+      const consulta = await ListarNotificaciones();
+      if (consulta.statusresponse) {
+        setnotificaciones(size(consulta.data));
+        console.log(consulta);
+      }
     })();
   }, []);
 
   useFocusEffect(
     useCallback(() => {
       (async () => {
+        setnotificaciones(0);
         setproductlist(await ListarProductos());
+        const consulta = await ListarNotificaciones();
+        if (consulta.statusresponse) {
+          setnotificaciones(size(consulta.data));
+        }
       })();
     }, [])
   );
