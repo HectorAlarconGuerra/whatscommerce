@@ -17,9 +17,9 @@ import {
 } from "../../Utils/Acciones";
 import { enviarWhatsapp } from "../../Utils/Utils";
 import { size } from "lodash";
-import Loading from "../../Componentes/Loading";
-import Carousel from "../../Componentes/Carousel";
-import Modal from "../../Componentes/Modal";
+import Loading from "../../Components/Loading";
+import Carousel from "../../Components/Carousel";
+import Modal from "../../Components/Modal";
 export default function Detalle(props) {
   const { route } = props;
   const { id, titulo } = route.params;

@@ -8,6 +8,7 @@ import TiendaStack from "./TiendaStack";
 import PerfilStack from "./PerfilStack";
 import MiTienda from "./MiTiendaStack";
 import ShopButton from "../Components/ShoopButton";
+import CustomDrawerContent from "../Components/CustomDrawerContent";
 
 //aquí importaremos algunos componentes más tarde
 
@@ -41,8 +42,7 @@ const TabBar = () => {
       <Tab.Screen
         component={MiTienda}
         name="mitienda"
-        options={{ title: "", tabBarIcon:()=><ShopButton/> }}
-         
+        options={{ title: "", tabBarIcon: () => <ShopButton /> }}
       />
       <Tab.Screen
         component={PerfilStack}
@@ -78,7 +78,20 @@ function mostrarIcono(route, color) {
 export default function RutasAutenticadas() {
   return (
     <NavigationContainer>
-      <TabBar />
+      <Drawer.Navigator
+        drawerContent={(props) => <CustomDrawerContent {...props} />}
+      >
+        <Drawer.Screen
+          name="Tienda"
+          component={TabBar}
+          options={{
+            title: "Tienda",
+            drawerIcon: () => {
+              <Icon type="material-community" name="store" size={24} />;
+            },
+          }}
+        />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }

@@ -31,7 +31,7 @@ export default function TiendaStack() {
         component={MensajesList}
         name="mensajes"
         options={{
-          titulo: "Agregar Nuevo Prodcuto",
+          titulo: "Mensajes",
           headerStyle: { backgroundColor: "#128C7E" },
           headerTintColor: "#fff",
         }}
@@ -40,7 +40,7 @@ export default function TiendaStack() {
         component={Contacto}
         name="contacto"
         options={{
-          titulo: "Agregar Nuevo Prodcuto",
+          titulo: "Contácto",
           headerStyle: { backgroundColor: "#128C7E" },
           headerTintColor: "#fff",
         }}
